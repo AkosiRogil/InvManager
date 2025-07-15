@@ -349,7 +349,7 @@ $recentTransactions = getRecentTransactions($conn);
                                             <div class="h5 mb-0 font-weight-bold text-gray-800"><?php get_total_quantity() ?> </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clip-board fa-2x text-gray-300"></i>
+                                            <i class="fas fa-list fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
