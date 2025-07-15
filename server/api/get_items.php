@@ -11,10 +11,9 @@ $today = date('Y-m-d', strtotime('+0 day'));
 // Borrow Notifications
 // ===========================
 if (!function_exists('getDueCount')) {
-    function getDueCount($conn, $tomorrow, $yesterday) {
-        $sql = "SELECT COUNT(*) as due_tomorrow_count FROM borrow WHERE (return_date >= ? or return_date <= ? or return_date = CURDATE()) and status != 'Returned'";
+    function getDueCount($conn) {
+        $sql = "SELECT COUNT(*) as due_tomorrow_count FROM borrow WHERE status != 'Returned' and return_date <= DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $tomorrow, $yesterday);
         $stmt->execute();
         $result = $stmt->get_result();
         $row = $result->fetch_assoc();
@@ -144,6 +143,31 @@ if (!function_exists('get_total_quantity_by_status')) {
         $row = $result->fetch_assoc();
 
         return $row['total'] ?? 0;
+    }
+}
+
+if (!function_exists('get_total_quantity')) {
+    function get_total_quantity() {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT SUM(total_quantity) AS total FROM items");
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        echo $row['total'] ?? 0;
+    }
+}
+
+if (!function_exists('get_total_borrowed')) {
+    function get_total_borrowed() {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT SUM(quantity - IFNULL(returned_quantity, 0)) AS total FROM borrow WHERE status != 'Returned';");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        echo $row['total'] ?? 0;
     }
 }
 

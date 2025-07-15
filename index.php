@@ -19,8 +19,8 @@ $yesterday = date('Y-m-d', strtotime('-1 day'));
 $yesterday2 = date('Y-m-d', strtotime('-2 day'));
 
 // Call data-fetching functions
-$dueCount = getDueCount($conn, $tomorrow, $yesterday);
-$dueItems = getDueItems($conn, $tomorrow);
+$dueCount = getDueCount($conn);
+$dueItems = getDueItems($conn,$tomorrow);
 $actCount = getActCount($conn);
 $recentTransactions = getRecentTransactions($conn);
 ?>
@@ -346,7 +346,7 @@ $recentTransactions = getRecentTransactions($conn);
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Total Items</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">20</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php get_total_quantity() ?> </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clip-board fa-2x text-gray-300"></i>
@@ -364,7 +364,7 @@ $recentTransactions = getRecentTransactions($conn);
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Usable Items</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">2</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">  <?php echo get_total_quantity_by_status('Excellent')?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-check fa-2x text-gray-300"></i>
@@ -402,7 +402,7 @@ $recentTransactions = getRecentTransactions($conn);
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 Borrowed Items</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php get_total_borrowed() ?></div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard fa-2x text-gray-300"></i>

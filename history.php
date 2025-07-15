@@ -16,7 +16,7 @@ $yesterday = date('Y-m-d', strtotime('-1 day'));
 $yesterday2 = date('Y-m-d', strtotime('-2 day'));
 
 
-$dueCount = getDueCount($conn, $tomorrow, $yesterday);
+$dueCount = getDueCount($conn);
 $dueItems = getDueItems($conn, $tomorrow);
 $actCount = getActCount($conn);
 $recentTransactions = getRecentTransactions($conn);
