@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Execute the query and redirect with message
     if ($conn->query($sql) === TRUE) {
         $log = $conn->prepare("INSERT INTO transaction(type, user, time) VALUES ('Add',?, NOW())");
-        $log->bind_param('s',$_SESSION['username'])
+        $log->bind_param('s',$_SESSION['username']);
         $log->execute();
         header('Location: ../../items.php?success=1');
     } else {

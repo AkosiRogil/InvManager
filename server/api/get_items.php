@@ -146,6 +146,20 @@ if (!function_exists('get_total_quantity_by_status')) {
     }
 }
 
+if (!function_exists('get_total_available')) {
+    function get_total_available() {
+        global $conn;
+
+        $stmt = $conn->prepare("SELECT SUM(available) AS total FROM items WHERE status = 'Excellent'");
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['total'] ?? 0;
+    }
+}
+
 if (!function_exists('get_total_quantity')) {
     function get_total_quantity() {
         global $conn;

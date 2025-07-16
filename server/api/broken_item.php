@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_stmt->execute();
         $update_stmt->close();
 
-        $newDescription = "Old Description ".$original_item['description']."New Description ".$brokenNotes;
+        $newDescription = "From Item_id ".$item_id." Note: ".$brokenNotes;
 
         // 2. Insert broken item
         $insert_stmt = $conn->prepare("
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $original_item['low_stock_threshold']
         );
         $insert_stmt->execute();
-        $log = $conn->prepare("INSERT INTO transaction(type, user, time) VALUES ('update (broken)',?, NOW())")
+        $log = $conn->prepare("INSERT INTO transaction(type, user, time) VALUES ('update (broken)',?, NOW())");
         $log->bind_param('s',$_SESSION['username']);
         $log->execute();
         $insert_stmt->close();

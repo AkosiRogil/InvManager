@@ -65,7 +65,7 @@ try {
     $stmt->bind_param("sissi", $new_status, $returned_quantity, $return_condition, $return_notes, $borrow_id);
     $stmt->execute();
 
-    if (strtolower($return_condition) !== 'Broken') {
+    if ($return_condition !== 'Broken') {
         // If condition is excellent, add back to available stock
         $update_item = "UPDATE items
                         SET available = available + ? 
@@ -88,18 +88,18 @@ try {
         }
 
         $item = $item_result->fetch_assoc();
+        $newDescription = "From Item Id: ".$item_id." Broken: ".$item['description']." Declared Broken after borrowed";
 
         // Insert new item with returned quantity and condition as status
         $insert_new_item = "INSERT INTO items 
             (item_name, category, description, total_quantity, available, status, cost_price, low_stock_threshold, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())";
+            VALUES (?, ?, ?, ?, 0, ?, ?, ?, NOW(), NOW())";
         $stmt = $conn->prepare($insert_new_item);
         $stmt->bind_param(
-            "sssissdi",
+            "sssisdi",
             $item['item_name'],
             $item['category'],
-            $item['description'],
-            $returned_quantity,
+            $newDescription,
             $returned_quantity,
             $return_condition,
             $item['cost_price'],

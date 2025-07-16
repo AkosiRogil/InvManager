@@ -66,6 +66,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
                 <table class="table table-bordered" id="dataTableCustom" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Quantity</th>
@@ -78,6 +79,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
                     <tbody>
                       <?php foreach ($items as $item): ?>
                           <tr>
+                              <td><?= htmlspecialchars($item['item_id']) ?></td>
                               <td><?= htmlspecialchars($item['item_name']) ?></td>
                               <td><?= htmlspecialchars($item['category']) ?></td>
                               <td><?= htmlspecialchars($item['total_quantity']) ?></td>
@@ -131,7 +133,6 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
         <p><strong>Name:</strong> <span id="view_name"></span></p>
         <p><strong>Category:</strong> <span id="view_category"></span></p>
         <p><strong>Quantity:</strong> <span id="view_quantity"></span></p>
-        <p><strong>Type:</strong> <span id="view_type"></span></p>
         <p><strong>Status:</strong> <span id="view_status"></span></p>
         <p><strong>Description:</strong> <span id="view_description"></span></p>
         <p><strong>Added at:</strong> <span id="added_at"></span></p>

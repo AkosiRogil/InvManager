@@ -10,33 +10,63 @@ $item_id = $_POST['item_id'];
 $item_name = $_POST['item_name'];
 $category = $_POST['category'];
 $description = $_POST['description'];
-$total_quantity = $_POST['total_quantity'];
+$new_total_quantity = (int)$_POST['total_quantity'];
 $status = $_POST['status'];
-$cost_price = $_POST['cost_price'];
-$low_stock_threshold = $_POST['low_stock_threshold'];
+$cost_price = (float)$_POST['cost_price'];
+$low_stock_threshold = (int)$_POST['low_stock_threshold'];
 
-$sql = "UPDATE items SET
-            item_name = ?,
-            category = ?,
-            description = ?,
-            total_quantity = ?,
-            status = ?,
-            cost_price = ?,
-            low_stock_threshold = ?,
-            updated_at = NOW()
-        WHERE item_id = ?";
+$fetch = $conn->prepare("SELECT total_quantity FROM items WHERE item_id = ?");
+$fetch->bind_param("i", $item_id);
+$fetch->execute();
+$fetch->bind_result($old_total_quantity);
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("sssisdii", $item_name, $category, $description, $total_quantity, $status, $cost_price, $low_stock_threshold, $item_id);
+if ($fetch->fetch()) {
+    $fetch->close();
 
-if ($stmt->execute()) {
-    $log = $conn->prepare("INSERT INTO transaction(type, user, time) VALUES ('update',?, NOW())");
-    $log->bind_param('s',$_SESSION['username']);
-    $log->execute();
+    $available_increment = $new_total_quantity - $old_total_quantity;
 
-    header("Location: ../../items.php?success=2");
+
+    $sql = "UPDATE items SET
+                item_name = ?,
+                category = ?,
+                description = ?,
+                available = available + ?,
+                total_quantity = ?,
+                status = ?,
+                cost_price = ?,
+                low_stock_threshold = ?,
+                updated_at = NOW()
+            WHERE item_id = ?";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        "sssissidi", 
+        $item_name,
+        $category,
+        $description,
+        $available_increment,
+        $new_total_quantity,
+        $status,
+        $cost_price,
+        $low_stock_threshold,
+        $item_id
+    );
+
+    if ($stmt->execute()) {
+        // ✅ 4. Log the transaction
+        $log = $conn->prepare("INSERT INTO transaction(type, user, time) VALUES ('update', ?, NOW())");
+        $log->bind_param('s', $_SESSION['username']);
+        $log->execute();
+
+        header("Location: ../../items.php?success=2");
+        exit;
+    } else {
+        echo "Error updating record: " . $stmt->error;
+    }
+
+    $stmt->close();
 } else {
-    echo "Error updating record: " . $conn->error;
+    echo "Item not found or failed to fetch.";
 }
 
 $conn->close();
