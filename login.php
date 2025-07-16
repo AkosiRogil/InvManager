@@ -377,7 +377,6 @@ if (isset($_GET['success'])): ?>
                         <input type="checkbox" id="rememberMe" name="remember">
                         <label for="rememberMe">Remember Me</label>
                     </div>
-                    <a href="forgot-password.php" class="forgot-password">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="btn-login">
@@ -389,9 +388,7 @@ if (isset($_GET['success'])): ?>
                 <div class="divider">
                     <span></span>
                 </div>
-                <div class="mb-2">
-                    <a href="forgot-password.php">Forgot Password?</a>
-                </div>
+       
                 <div>
                     <a href="register.php">Create an Account!</a>
                 </div>
