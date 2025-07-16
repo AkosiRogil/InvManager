@@ -164,7 +164,7 @@ if (!function_exists('get_total_quantity')) {
     function get_total_quantity() {
         global $conn;
 
-        $stmt = $conn->prepare("SELECT SUM(total_quantity) AS total FROM items");
+        $stmt = $conn->prepare("SELECT SUM(total_quantity) AS total FROM items where status = 'Excellent'");
         $stmt->execute();
 
         $result = $stmt->get_result();
