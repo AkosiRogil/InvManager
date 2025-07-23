@@ -72,6 +72,7 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
                             <th>Quantity</th>
                             <th>Available</th>
                             <th>Description</th>
+                            <th>Cost</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -85,31 +86,34 @@ if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
                               <td><?= htmlspecialchars($item['total_quantity']) ?></td>
                               <td><?= htmlspecialchars($item['available']) ?></td>
                               <td><?= htmlspecialchars($item['description']) ?></td>
+                              <td>₱<?= htmlspecialchars($item['cost_price']) ?></td>
                               <td><?= htmlspecialchars($item['status']) ?></td>
                               <td>
-                                  <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#viewModal"
-                                          data-item='<?= json_encode($item) ?>'>
+                                  <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#viewModal"                                          data-item='<?= json_encode($item) ?>'>
                                       <i class="fas fa-eye"></i>
                                   </button>
 
 
                                   <?php if ($item['status'] !== 'Broken'): ?>
+                                    
+                                    
+                                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#borrowModal"
+                                              data-item='<?= json_encode($item) ?>'>
+                                          <i class="fas fa-hand-paper"></i>
+                                      </button>
 
+                                      <?php if($_SESSION['admin'] == 1):?>
+                                        
                                       <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal"
                                           data-item='<?= json_encode($item) ?>'>
                                       <i class="fas fa-edit"></i>
                                       </button>
 
-                                      <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#borrowModal"
-                                              data-item='<?= json_encode($item) ?>'>
-                                          <i class="fas fa-hand-paper"></i>
-                                      </button>
-                                      
-
                                       <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#brokenModal"
                                               data-item='<?= json_encode($item) ?>'>
                                           <i class="fas fa-minus"></i>
                                       </button>
+                                      <?php endif;?>
                                   <?php endif; ?>
                               </td>
                           </tr>

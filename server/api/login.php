@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Check if username exists
-    $stmt = $conn->prepare("SELECT user_id, user_name, password, f_name, l_name FROM user WHERE user_name = ?");
+    $stmt = $conn->prepare("SELECT user_id, user_name, password, f_name, l_name, admin FROM user WHERE user_name = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['fullname'] = $user['f_name']." ".$user['l_name'];
         $_SESSION['name'] = $user['f_name'];
         $_SESSION['logged'] = true; // Add this line
+        $_SESSION['admin'] = $user['admin'];
 
     // Redirect to dashboard
     header("Location: ../../index.php?success=0");
